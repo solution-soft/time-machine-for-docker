@@ -9,7 +9,7 @@ ENV TMAGENT_LOGDIR "/tmdata/log"
 
 USER root
 
-COPY release/tm_linux_2.6.up_x86_64-12.9R2.tgz /tmp
+COPY release/tm_linux_2.6.up_x86_64-12.9R3.tgz /tmp
 COPY py/get-pip.py /tmp
 
 # - install supervisor and TM
@@ -17,7 +17,7 @@ COPY py/get-pip.py /tmp
 RUN mkdir -p /tmdata \
 &&  python /tmp/get-pip.py \
 &&  pip install --no-cache-dir supervisor \
-&&  (cd /tmp; tar -xzf tm_linux_2.6.up_x86_64-12.9R2.tgz; ./ssstm_install.sh tm_linux_2.6.up_x86_64-12.9R2.rpm) \
+&&  (cd /tmp; tar -xzf tm_linux_2.6.up_x86_64-12.9R3.tgz; ./ssstm_install.sh tm_linux_2.6.up_x86_64-12.9R3.rpm) \
 &&  rm -rf /tmp/*
 
 # - copy tm license daemon
