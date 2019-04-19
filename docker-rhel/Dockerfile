@@ -18,6 +18,7 @@ RUN mkdir -p /tmdata \
 &&  python /tmp/get-pip.py \
 &&  pip install --no-cache-dir supervisor \
 &&  (cd /tmp; tar -xzf tm_linux_2.6.up_x86_64-12.9R3.tgz; ./ssstm_install.sh tm_linux_2.6.up_x86_64-12.9R3.rpm) \
+&&  adduser -r time-traveler \
 &&  rm -rf /tmp/*
 
 # - copy tm license daemon
