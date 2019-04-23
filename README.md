@@ -1,4 +1,4 @@
-#Time Machine for Docker#
+# Time Machine for Docker #
 
 Time Machine® is a software product providing virtual clocks that enable you to time travel your applications into the future or the past, facilitating time shift testing on your date and time sensitive application logic, such as month end, quarter end, year-end processing, billing cycle, work flow, regulatory go live, and policy life cycle.
 
@@ -7,7 +7,7 @@ Time Machine is transparent to applications and databases so no code modificatio
 Time Machine® for Docker enables time traval in docker containers by providing
 a serious Docker images with Time Machine installed.
 
-##Using Time Machine in Docker containers##
+## Using Time Machine in Docker containers ##
 
 To use Time Machine (TM) with Docker containers, a host copy of TM should be first installed on the main host system that serves the containers. It is a prerequisite for running of TM in the containers successfully as containers share the same address space as the host. 
 
@@ -28,7 +28,7 @@ TMFLS will provide licensing for TM in the containers you'll create. To enable T
 Please refer to the file `tm_linux_docker_readme.txt` on how to install TM and to license & configure TMFLS.
 
 
-##Creating containers with Time Machine pre-installed##
+## Creating containers with Time Machine pre-installed ##
 
 After TM is installed on the host(s), to create containers that will use TM, you can use preconfigured *Solution-Soft* docker images that have TM already installed and are available from the Docker Hub.
 
@@ -116,7 +116,7 @@ As soon as you stop the container, the license is released back to the TMFLS, an
 If you want to create multiple containers with docker run command (like described above), you will need to run the command each time for a new container, changing the host port value and host directory that need to be mapped to the new container.
 
 
-##Manage Docker/Time Machine containers using docker-compose##
+## anage Docker/Time Machine containers using docker-compose ##
 
 Beside using the command docker run to create containers from preconfigured images that have TM preinstalled, you can also use docker-compose tool to easily create multiple containers with TM running, using a single command.
 
@@ -129,7 +129,7 @@ According to its design, one should use a YAML file to specify the application i
 In the following example, we will show how to use docker-compose to define a single and multiple Docker/Time Machine configuration. We will assume that all the containers will run in the current working directory.
 
 
-###Single Application Configuration###
+### Single Application Configuration ###
 
 This is a single TM docker configuration:
 
@@ -162,7 +162,7 @@ To stop this instance:
 ```# docker-compose down```
 
 
-###Multiple Application Configuration###
+### Multiple Application Configuration ###
 
 Let's assume that we will configure three applications, with their persistent data stored at `./tmdata1`, `./tmdata2`, `./tmdata3`, respectively.  In addition, their TMagent listening ports will be 17800, 27800 and 37800, respectively.
 
@@ -230,7 +230,7 @@ To stop one application `three`:
 
 Please note that applications `one`, `two` and `three` will all be operating in the same docker subnet.
 
-##Managing TM inside the Containers##
+## Managing TM inside the Containers ##
 
 Once you have containers with Time Machine running, to manage Time Machine inside the containers, you can use a docker command to spawn a shell session to a respective container and issue TM commands from the command line:
 
@@ -366,7 +366,7 @@ To read more about TM Sync Server, please refer to:
 ```https://solution-soft.com/sites/default/files/wysiwyg/TM%20Sync%20Server%20Data%20Sheet_0.pdf```
 
 
-#Contact Support#
+# Contact Support #
 
 NOTE: If you have any technical support questions or need an evaluation key, please contact us at:
     
