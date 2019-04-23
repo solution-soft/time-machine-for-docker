@@ -116,7 +116,7 @@ As soon as you stop the container, the license is released back to the TMFLS, an
 If you want to create multiple containers with docker run command (like described above), you will need to run the command each time for a new container, changing the host port value and host directory that need to be mapped to the new container.
 
 
-## anage Docker/Time Machine containers using docker-compose ##
+## Manage Docker/Time Machine containers using docker-compose ##
 
 Beside using the command docker run to create containers from preconfigured images that have TM preinstalled, you can also use docker-compose tool to easily create multiple containers with TM running, using a single command.
 
@@ -230,7 +230,7 @@ To stop one application `three`:
 
 Please note that applications `one`, `two` and `three` will all be operating in the same docker subnet.
 
-## Managing TM inside the Containers ##
+## Operate TM inside the Containers ##
 
 Once you have containers with Time Machine running, to manage Time Machine inside the containers, you can use a docker command to spawn a shell session to a respective container and issue TM commands from the command line:
 
