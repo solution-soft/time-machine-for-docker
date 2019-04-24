@@ -19,7 +19,7 @@ You can download host version of TM from the following location:
 
 `ftp://ftp.solution-soft.com/pub/tm/docker/Linux/redhat/`
 
-In the same location, you'll also find a `tm_linux_docker_readme.txt` file that explains the installation steps in more details.
+In the same location, you'll also find a `tm_linux_docker_host_readme.txt` file that explains the installation steps in more details.
 
 This host version of TM also has the TM Floating License Server (TMFLS) bundled with it, and it is automatically installed along side with TM on the host.
 
