@@ -72,7 +72,7 @@ This will return a hash string representing the detached container ID. For examp
 
 Some explanation here:
 
-1. as described above, we use environment variables `TM_LICHOST`, `TM_LICPORT` and `TM_LICPASS` to allow TM in the container to automatically check out a license from TMFLS;
+1. as described above, we use environment variables `TM_LICHOST`, `TM_LICPORT` and `TM_LICPASS` to allow TM in the container to automatically check out a license from TMFLS; In this example 192.168.20.112 is the IP address of the host that runs the containers, and at the same time TMFLS.
 
 2.  TMAgent port 7800 inside the container is mapped to 17800 in the local machine;
 
