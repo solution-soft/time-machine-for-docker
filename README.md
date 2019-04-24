@@ -5,7 +5,7 @@ Time Machine® is a software product providing virtual clocks that enable you to
 Time Machine is transparent to applications and databases so no code modification is required to do time shift testing and the system clock is never modified. Time Machine eliminates the need to reset the system clock, which is time consuming, error prone and not possible under Active Directory, in a Kerberos secured or SSL enabled environment.
 
 Time Machine® for Docker enables time traval in docker containers by providing
-a serious Docker images with Time Machine installed.
+a collection of Docker images with Time Machine installed.
 
 ## Using Time Machine in Docker containers ##
 
@@ -19,7 +19,7 @@ You can download host version of TM from the following location:
 
 `ftp://ftp.solution-soft.com/pub/tm/docker/Linux/redhat/`
 
-In the same location, you'll also find a `tm_linux_docker_readme.txt` file that explains the installation steps in more details.
+In the same location, you'll also find a `tm_linux_docker_host_readme.txt` file that explains the installation steps in more details.
 
 This host version of TM also has the TM Floating License Server (TMFLS) bundled with it, and it is automatically installed along side with TM on the host.
 
@@ -72,7 +72,7 @@ This will return a hash string representing the detached container ID. For examp
 
 Some explanation here:
 
-1. as described above, we use environment variables `TM_LICHOST`, `TM_LICPORT` and `TM_LICPASS` to allow TM in the container to automatically check out a license from TMFLS;
+1. as described above, we use environment variables `TM_LICHOST`, `TM_LICPORT` and `TM_LICPASS` to allow TM in the container to automatically check out a license from TMFLS.  In this example, `192.168.20.112` is the IP address of the host that runs the containers, and at the same time TMFLS;
 
 2.  TMAgent port 7800 inside the container is mapped to 17800 in the local machine;
 
@@ -300,9 +300,9 @@ for managing virtual clocks at the command line.
 tmuser: report: Virtual clock for uid 999 has been deleted
 ```
 
-You can also use the TM Management Console (Java based GUI that also comes bundled with TM on the host) to manage Time Machine in each of your containers. See TM Management Console documentation for more details (by default located under `/etc/ssstm/tmconsole/` on the host).
+You can use the TM Management Console (Java based GUI that also comes bundled with TM on the host) to manage Time Machine in each of your containers. See TM Management Console documentation for more details (by default located under `/etc/ssstm/tmconsole/` on the host).
 
-So, for example, if you're running three containers on your host, by mapping host's ports 17800, 27800 and 37800 to redirect the traffic to respective containers' port 7800, you'll be able to connect your TM Management Console to all three at the same time, choosing TM Agent type of connection and using the following connection strings:
+So, for example, if you're running three containers on your host, by mapping host's ports 17800, 27800 and 37800 to redirect the traffic to respective containers' port 7800, you'll be able to connect your TM Management Console to all three in parallel, choosing TM Agent type of connection and using the following connection strings, respectively:
 
 ```
 localhost:17800
