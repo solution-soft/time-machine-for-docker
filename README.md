@@ -25,7 +25,7 @@ This host version of TM also has the TM Floating License Server (TMFLS) bundled 
 
 TMFLS will provide licensing for TM in the containers you'll create. To enable TMFLS, you will need to acquire a license key from SolutionSoft Systems, Inc.
 
-Please refer to the file `tm_linux_docker_readme.txt` on how to install TM and to license & configure TMFLS.
+Please refer to the file `tm_linux_docker_host_readme.txt` on how to install TM and to license & configure TMFLS.
 
 
 ## Creating containers with Time Machine pre-installed ##
