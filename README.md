@@ -302,7 +302,7 @@ tmuser: report: Virtual clock for uid 999 has been deleted
 
 You can also use the TM Management Console (Java based GUI that comes bundled with TM on the host) to manage Time Machine in each of your containers. See TM Management Console documentation for more details (by default located under `/etc/ssstm/tmconsole/` on the host).
 
-So, for example, if you're running three containers on your host, by mapping host's ports 17800, 27800 and 37800 to redirect the traffic to respective containers' port 7800, you'll be able to connect your TM Management Console to all three at the same time, choosing TM Agent type of connection and using the following connection strings:
+So, for example, if you're running three containers on your host, by mapping host's ports 17800, 27800 and 37800 to redirect the traffic to respective containers' port 7800, you'll be able to connect your TM Management Console to all three in parallel, choosing TM Agent type of connection and using the following connection strings, respectively:
 
 ```
 localhost:17800
