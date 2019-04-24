@@ -4,8 +4,8 @@ Time Machine® is a software product providing virtual clocks that enable you to
 
 Time Machine is transparent to applications and databases so no code modification is required to do time shift testing and the system clock is never modified. Time Machine eliminates the need to reset the system clock, which is time consuming, error prone and not possible under Active Directory, in a Kerberos secured or SSL enabled environment.
 
-Time Machine® for Docker enables time traval in docker containers by providing
-a serious Docker images with Time Machine installed.
+Time Machine® for Docker enables time travel in docker containers by providing
+a series of Docker images with Time Machine installed.
 
 ## Using Time Machine in Docker containers ##
 
