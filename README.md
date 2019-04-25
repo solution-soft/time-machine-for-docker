@@ -90,7 +90,7 @@ You can use the following command to check the container status:
 ```
 # docker ps
 CONTAINER ID   IMAGE                                         COMMAND                 CREATED         STATUS         PORTS                     NAMES
-be3c8f15dc20   solutionsoft/time-machine-for-centos7:12.9R2  "/entrypoint.sh /usrÖ"  5 seconds ago   Up 3 seconds   0.0.0.0:17800->7800/tcp   adoring_euclid
+be3c8f15dc20   solutionsoft/time-machine-for-centos7:12.9R2  "/entrypoint.sh /usr..."  5 seconds ago   Up 3 seconds   0.0.0.0:17800->7800/tcp   adoring_euclid
 ```
 
 With the container running in the background, you can spawn a shell session to the container and check from the inside:
