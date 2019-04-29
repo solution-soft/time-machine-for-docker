@@ -40,11 +40,11 @@ To download and use any of the available container images, click on the desired 
 
 For example, to download the latest TM image for CentOS 7 (assuming you have docker service already installed and running on your host), you would need to run:
 
-```# docker pull solutionsoft/time-machine-for-centos7:latest```
+`# docker pull solutionsoft/time-machine-for-centos7:latest`
 
 or to download the latest TM image for RHEL 7, you would need to run:
 
-```# docker pull solutionsoft/time-machine-for-rhel7:latest```
+`# docker pull solutionsoft/time-machine-for-rhel7:latest`
 
 
 Each of the available docker images has TM preinstalled, and configured to use a license from a TMFLS. It is typically served from the host on which the containers are running.
@@ -54,7 +54,7 @@ TMFLS target is specified by the environment variables `TM_LICHOST`, `TM_LICPORT
 
 Before creating a container from the preconfigured image, we first need to create a directory on the host to keep the persistent data for a container, since TM stores some persistent data (such as log files, or persistent virtual clocks info). Let's assume we'll use directory `/var/tm/tmdata1` for the TMAgent persistent data and logs. To create such a directory, use the following command:
 
-```# mkdir -p /var/tm/tmdata1```
+`# mkdir -p /var/tm/tmdata1`
 
 We can then use the following command to start/create a container in a detached mode:
 
@@ -109,7 +109,7 @@ _db.dat
 
 To stop the container, run the following command:
 	
-```# docker container stop be3c8f15dc20```
+`# docker container stop be3c8f15dc20`
 
 As soon as you stop the container, the license is released back to the TMFLS, and it will become available to another container.
 
@@ -155,11 +155,11 @@ services:
 
 To start this instance:
 
-```# docker-compose up -d```
+`# docker-compose up -d`
 
 To stop this instance:
 
-```# docker-compose down```
+`# docker-compose down`
 
 
 ### Multiple Application Configuration ###
@@ -215,18 +215,18 @@ services:
 
 To start all the applications:
 
-```# docker-compose up -d```
+`# docker-compose up -d`
 To stop all the applications:
 
-```# docker-compose down```
+`# docker-compose down`
 
 To start one application `two`:
 
-```# docker-compose up two -d```
+`# docker-compose up two -d`
 
 To stop one application `three`:
 
-```# docker-compose down three```
+`# docker-compose down three`
 
 Please note that applications `one`, `two` and `three` will all be operating in the same docker subnet.
 
@@ -234,7 +234,7 @@ Please note that applications `one`, `two` and `three` will all be operating in 
 
 Once you have containers with Time Machine running, to manage Time Machine inside the containers, you can use a docker command to spawn a shell session to a respective container and issue TM commands from the command line:
 
-```# docker exec -it be3c8f15dc20 /bin/bash```
+`# docker exec -it be3c8f15dc20 /bin/bash`
 
 Fo your convenience, a container created from Solution-Soft preconfigured docker images has a single existing user called time-traveler, and a user group of the same name:
 
@@ -314,13 +314,13 @@ localhost:37800
 
 Once you connect to a container via TM console, you'll be able to create virtual clocks for OS users and affect all processes running under those users (among others, the processes of DB or App servers for example).
 
-Please note that initially, the user time-traveler will be hidden in the Console, and to assign a virtual clock for such a user, please refer to TM Management Console user manual, located under `/etc/ssstm/tmconsole/` on the host. Adding such users is specifically described in SECTION 3. LOCAL TIME MACHINE MANAGEMENT, subsection C. CONFIGURE VIRTUAL TIME FOR OS GROUPS AND USERS. 
+Please note that initially, the user time-traveler will be hidden in the Console, and to assign a virtual clock for such a user, please refer to TM Management Console user manual, located under `/etc/ssstm/tmconsole/` on the host. Adding such users is specifically described in *SECTION 3. LOCAL TIME MACHINE MANAGEMENT*, *subsection C. CONFIGURE VIRTUAL TIME FOR OS GROUPS AND USERS*. 
 
 If your containers span multiple hosts, then you can use an enhanced version of the Console, called TM Enterprise Management Console to manage them all from a Windows system with one console. 
 
 You can download the Enterprise Console from the following location:
 
-```ftp://ftp.solution-soft.com/pub/tm/tmconsole/enterprise/```
+`ftp://ftp.solution-soft.com/pub/tm/tmconsole/enterprise/`
 
 In the same directory, you can find a readme-tmconsole-enterprise.txt file, that explains how to install and license it. Once installed, a detailed manual is also available in the installation folder.
 
@@ -342,7 +342,7 @@ Also, if Linux host that runs containers, does not have X Window System enabled 
 
 To read more about TM Enterprise Management Console, please refer to:
 
-```https://solution-soft.com/sites/default/files/wysiwyg/TM%20Enterprise%20Management%20Console_4.pdf```
+`https://solution-soft.com/sites/default/files/wysiwyg/TM%20Enterprise%20Management%20Console_4.pdf`
 
 
 In a situation when you need to simultaneously time travel multiple containers, you would use another product from Time Machine Suite, namely Time Machine Sync Server.
@@ -355,7 +355,7 @@ Like with all the other products from the Time Machine Suite, TM Management Cons
 
 You can download TM Sync Server from the following location:
 
-```ftp://ftp.solution-soft.com/pub/tm/tmsync/```
+`ftp://ftp.solution-soft.com/pub/tm/tmsync/`
 
 After you open the above location in a browser, you can traverse through the available directories to choose the OS where you want to install it. When you locate the desired directory, next to the install package, you'll find a readme_tmss.txt file that explains how to install and license the Sync Server.
 
@@ -363,7 +363,7 @@ Once installed, a detailed manual is also available in the installation folder.
 
 To read more about TM Sync Server, please refer to:
 
-```https://solution-soft.com/sites/default/files/wysiwyg/TM%20Sync%20Server%20Data%20Sheet_0.pdf```
+`https://solution-soft.com/sites/default/files/wysiwyg/TM%20Sync%20Server%20Data%20Sheet_0.pdf`
 
 
 # Contact Support #
