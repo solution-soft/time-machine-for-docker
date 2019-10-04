@@ -25,10 +25,12 @@ ARG TINI_VERSION=v0.18.0
 USER root
 
 # - ADD files and install packages
+
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 ADD ftp://ftp.solution-soft.com/pub/tm/linux/redhat/64bit/tm_linux_2.6.up_x86_64-${TM_VERSION}.tgz /tmp
 
 # - install supervisor and TM
+
 RUN INSTALL_PKGS="rh-python36 rh-python36-python-devel rh-python36-python-setuptools rh-python36-python-pip nss_wrapper \
 	libffi-devel libtool-ltdl" \
 &&  yum -y update \
