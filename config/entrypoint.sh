@@ -1,33 +1,37 @@
 #!/bin/bash
 
+DEFAULT_USER=${DEFAULT_USER:-time-traveler}
+
+# make sure the default user is valid
+id $DEFAULT_USER> /dev/null 2>/dev/null || DEFAULT_USER=time-traveler
+
 set -e
 set -u
 
 # Run startup scripts
 
-if [ "$(ls /inittask/)" ]; then
+if [ -d /inittask ] && [ "$(ls /inittask/*.sh)" ]; then
   for init in /inittask/*.sh; do
-    . $init
+    sh $init
   done
   # no need to run it again
-  rm -f /inittask/*.sh
+  rm -rf /inittask
 fi
 
 # If we have an interactive container
-if test -t 0; then
-  # Execute commands passed to container and exit, or run bash
+if [[ -t 0 || -p /dev/stdin ]]; then
+  export PS1='[\u@\h : \w]\$ '
   if [[ $@ ]]; then 
-    eval $@
+    eval "exec $@"
   else 
-    export PS1='[\u@\h : \w]\$ '
-    /bin/bash
+    eval /bin/bash
   fi
 
 # If container is detached run superviord in the foreground 
 else
   if [[ $@ ]]; then 
     eval "exec $@"
-  else 
+  else
     exec /usr/bin/supervisord -c /etc/supervisord.conf
   fi
 fi

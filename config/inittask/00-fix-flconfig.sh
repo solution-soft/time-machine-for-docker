@@ -8,3 +8,5 @@ TM_LICPASS=${TM_LICPASS:-docker}
 
 mkdir -p /opt/solutionsoft/timemachine
 echo "$TM_LICHOST:$TM_LICPORT:$TM_LICPASS" > /opt/solutionsoft/timemachine/licserverhost
+
+exit 0
