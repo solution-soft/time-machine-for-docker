@@ -1,29 +1,55 @@
 FROM centos:centos7
 
-ENV LICHOST		"172.0.0.1"
-ENV LICPORT		"57777"
-ENV LICPASS		"docker"
+ENV PYTHON_VERSION=3.6 \
+    PATH=$HOME/.local/bin/:$PATH \
+    PYTHONUNBUFFERED=1 \
+    PYTHONIOENCODING=UTF-8
 
-ENV TM_VERSION		"12.9R3"
+ENV LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8 \
+    PIP_NO_CACHE_DIR=off
 
-ENV TMAGENT_DATADIR	"/tmdata/data"
-ENV TMAGENT_LOGDIR	"/tmdata/log"
+ENV LICHOST=172.0.0.1 \
+    LICPORT=57777 \
+    LICPASS=docker
+
+ENV TMAGENT_DATADIR=/tmdata/data \
+    TMAGENT_LOGDIR=/tmdata/log
+
+ENV DEFAULT_USER=time-traveler \
+    DEFAULT_HOME=/home/time-traveler
+
+ARG TM_VERSION=12.9R3
+ARG TINI_VERSION=v0.18.0 
 
 USER root
 
-COPY py/get-pip.py /tmp
+# - ADD files and install packages
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+ADD ftp://ftp.solution-soft.com/pub/tm/linux/redhat/64bit/tm_linux_2.6.up_x86_64-${TM_VERSION}.tgz /tmp
 
 # - install supervisor and TM
-
-RUN mkdir -p /tmdata \
-&&  python /tmp/get-pip.py \
-&&  pip install --no-cache-dir supervisor \
-&&  (cd /tmp; \
-     curl -O ftp://ftp.solution-soft.com/pub/tm/linux/redhat/64bit/tm_linux_2.6.up_x86_64-$TM_VERSION.tgz; \
-     tar -xzf tm_linux_2.6.up_x86_64-$TM_VERSION.tgz; \
-     ./ssstm_install.sh tm_linux_2.6.up_x86_64-$TM_VERSION.rpm) \
-&&  adduser -d /var/tmp -M -r time-traveler \
-&&  rm -rf /tmp/*
+RUN INSTALL_PKGS="rh-python36 rh-python36-python-devel rh-python36-python-setuptools rh-python36-python-pip nss_wrapper \
+	libffi-devel libtool-ltdl" \
+&&  yum -y update \
+&&  yum install -y centos-release-scl \
+&&  yum -y --setopt=tsflags=nodocs install --enablerepo=centosplus $INSTALL_PKGS \
+&&  rpm -V $INSTALL_PKGS \
+&&  source /opt/rh/rh-python36/enable \
+&&  pip3 install supervisor \
+&&  (cd /usr/bin; \
+     ln -f -s /opt/rh/rh-python36/root/bin/supervisord .; \
+     ln -f -s /opt/rh/rh-python36/root/bin/supervisorctl .; \
+     ln -f -s /opt/rh/rh-python36/root/bin/echo_supervisord_conf .;) \
+&&  mkdir -p /tmp/build \
+&&  (cd /tmp/build; \
+     tar -xzf /tmp/tm_linux_2.6.up_x86_64-${TM_VERSION}.tgz; \
+     ./ssstm_install.sh tm_linux_2.6.up_x86_64-${TM_VERSION}.rpm; \
+     yum history sync) \
+&&  yum -y clean all --enablerepo='*' \
+&&  rm -rf /tmp/* \
+&&  adduser -d ${DEFAULT_HOME} -s /bin/bash -M -r -c "Default User" ${DEFAULT_USER} \
+&&  mkdir -p /tmdata
 
 # - install tmlicd
 
@@ -36,5 +62,5 @@ COPY config /
 EXPOSE 7800
 VOLUME /tmdata
 
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/tini", "--", "/entrypoint.sh"]
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
