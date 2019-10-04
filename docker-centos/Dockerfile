@@ -46,6 +46,7 @@ RUN INSTALL_PKGS="rh-python36 rh-python36-python-devel rh-python36-python-setupt
      tar -xzf /tmp/tm_linux_2.6.up_x86_64-${TM_VERSION}.tgz; \
      ./ssstm_install.sh tm_linux_2.6.up_x86_64-${TM_VERSION}.rpm; \
      yum history sync) \
+&&  (cd /etc/ssstm/extras; rm -f .tm*.tgz Makefile.re) \
 &&  yum -y clean all --enablerepo='*' \
 &&  rm -rf /tmp/* \
 &&  adduser -d ${DEFAULT_HOME} -s /bin/bash -M -r -c "Default User" ${DEFAULT_USER} \
