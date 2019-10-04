@@ -27,7 +27,6 @@ USER root
 # - ADD files and install packages
 
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-ADD ftp://ftp.solution-soft.com/pub/tm/linux/redhat/64bit/tm_linux_2.6.up_x86_64-${TM_VERSION}.tgz /tmp
 
 # - install supervisor and TM
 
@@ -39,12 +38,15 @@ RUN source /opt/rh/rh-python36/enable \
      ln -f -s /opt/rh/rh-python36/root/bin/echo_supervisord_conf .;) \
 &&  mkdir -p /tmp/build \
 &&  (cd /tmp/build; \
-     tar -xzf /tmp/tm_linux_2.6.up_x86_64-${TM_VERSION}.tgz; \
+     curl -O ftp://ftp.solution-soft.com/pub/tm/linux/redhat/64bit/tm_linux_2.6.up_x86_64-${TM_VERSION}.tgz; \
+     tar -xzf tm_linux_2.6.up_x86_64-${TM_VERSION}.tgz; \
      ./ssstm_install.sh tm_linux_2.6.up_x86_64-${TM_VERSION}.rpm; \
      yum history sync) \
 &&  (cd /etc/ssstm/extras; rm -f .tm*.tgz Makefile.re) \
-&&  rm -rf /tmp/* \
+&&  rm -rf /tmp/build \
 &&  adduser -d $DEFAULT_HOME -s /bin/bash -M -r -c "Default User" $DEFAULT_USER \
+&&  chown root:root /tini \
+&&  chmod 0555 /tini \
 &&  mkdir -p /tmdata
 
 # - copy tm license daemon
