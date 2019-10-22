@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/usr/bin/with-contenv sh
+
 set -e
 
 # Create TM Floating license file based on the environment

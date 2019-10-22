@@ -1,71 +1,41 @@
 FROM centos:centos7
 
-ENV PYTHON_VERSION=3.6 \
-    PATH=$HOME/.local/bin/:$PATH \
-    PYTHONUNBUFFERED=1 \
-    PYTHONIOENCODING=UTF-8
+LABEL vendor="SolutionSoft Systems, Inc"
+LABEL maintainer="kzhao@solution-soft.com"
 
-ENV LC_ALL=en_US.UTF-8 \
-    LANG=en_US.UTF-8 \
-    PIP_NO_CACHE_DIR=off
+ENV LICHOST "172.0.0.1"
+ENV LICPORT "57777"
+ENV LICPASS "docker"
 
-ENV LICHOST=172.0.0.1 \
-    LICPORT=57777 \
-    LICPASS=docker
+ENV DATADIR "data"
+ENV LOGDIR  "log"
 
-ENV TMAGENT_DATADIR=/tmdata/data \
-    TMAGENT_LOGDIR=/tmdata/log
+ARG S6_OVERLAY_VERSION=v1.22.1.0
+ARG TM_LINUX_VERSION=12.9R3
 
-ENV DEFAULT_USER=time-traveler \
-    DEFAULT_HOME=/home/time-traveler
+ARG DEFAULT_USER=time-traveler
+ARG DEFAULT_HOME=/home/time-traveler
 
-ARG TM_VERSION=12.9R3
-ARG TINI_VERSION=v0.18.0 
+ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp
 
-USER root
-
-# - ADD files and install packages
-
-ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
-
-# - install supervisor and TM
-
-RUN INSTALL_PKGS="rh-python36 rh-python36-python-devel rh-python36-python-setuptools rh-python36-python-pip nss_wrapper \
-	libffi-devel libtool-ltdl" \
-&&  yum -y update \
-&&  yum install -y centos-release-scl \
-&&  yum -y --setopt=tsflags=nodocs install --enablerepo=centosplus $INSTALL_PKGS \
-&&  rpm -V $INSTALL_PKGS \
-&&  source /opt/rh/rh-python36/enable \
-&&  pip3 install supervisor \
-&&  (cd /usr/bin; \
-     ln -f -s /opt/rh/rh-python36/root/bin/supervisord .; \
-     ln -f -s /opt/rh/rh-python36/root/bin/supervisorctl .; \
-     ln -f -s /opt/rh/rh-python36/root/bin/echo_supervisord_conf .;) \
+RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" \
+&&  tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin \
+&&  curl -s ftp://ftp.solution-soft.com/pub/tm/linux/redhat/64bit/tm_linux_2.6.up_x86_64-${TM_LINUX_VERSION}.tgz -o /tmp/tm_linux.tgz \
 &&  mkdir -p /tmp/build \
-&&  (cd /tmp/build; \
-     curl -O ftp://ftp.solution-soft.com/pub/tm/linux/redhat/64bit/tm_linux_2.6.up_x86_64-${TM_VERSION}.tgz; \
-     tar -xzf tm_linux_2.6.up_x86_64-${TM_VERSION}.tgz; \
-     ./ssstm_install.sh tm_linux_2.6.up_x86_64-${TM_VERSION}.rpm; \
-     yum history sync) \
+&&  tar xzf /tmp/tm_linux.tgz -C /tmp/build \
+&&  (cd /tmp/build; ./ssstm_install.sh tm_linux_2.6.up_x86_64-${TM_LINUX_VERSION}.rpm) \
 &&  (cd /etc/ssstm/extras; rm -f .tm*.tgz Makefile.re) \
-&&  yum -y clean all --enablerepo='*' \
-&&  rm -rf /tmp/build \
-&&  adduser -d ${DEFAULT_HOME} -s /bin/bash -M -r -c "Default User" ${DEFAULT_USER} \
-&&  chown root:root /tini \
-&&  chmod 0555 /tini \
-&&  mkdir -p /tmdata
+&&  mkdir -p /tmdata \
+&&  adduser -d ${DEFAULT_HOME} -s /bin/bash -M -r -c "Default Time Travel User" ${DEFAULT_USER} \
+&&  rm -rf /tmp/s6-overlay-amd64.tar.gz /tmp/tm_linux.tgz /tmp/build
 
-# - install tmlicd
+# -- docker image build files
+COPY build /
 
-COPY bin/tmlicd /usr/local/bin
-
-# - install supervisord config files
-
-COPY config /
-
+# -- expose tmagent listening port
 EXPOSE 7800
+
+# -- where TM data stores
 VOLUME /tmdata
 
-ENTRYPOINT ["/tini", "--", "/entrypoint.sh"]
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]
+ENTRYPOINT ["/init"]
