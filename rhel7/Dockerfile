@@ -3,10 +3,6 @@ FROM registry.access.redhat.com/ubi7/ubi
 LABEL vendor="SolutionSoft Systems, Inc"
 LABEL maintainer="kzhao@solution-soft.com"
 
-ENV LC_ALL=en_US.UTF-8 \
-    LANG=en_US.UTF-8 \
-    PIP_NO_CACHE_DIR=off
-
 ENV LICHOST=172.0.0.1 \
     LICPORT=57777 \
     LICPASS=docker
