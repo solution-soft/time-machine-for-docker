@@ -1,5 +1,7 @@
 FROM solutionsoft/time-machine-for-centos7:latest AS build
 
+FROM busybox:1.30.1-musl AS toolbox
+
 FROM oraclelinux:8
 
 LABEL vendor="SolutionSoft Systems, Inc"
@@ -17,16 +19,16 @@ ARG S6_OVERLAY_VERSION=v1.22.1.0
 ARG DEFAULT_USER=time-traveler
 ARG DEFAULT_HOME=/home/time-traveler
 
+# -- copy 'tar' from busybox
+COPY --from=toolbox /bin/busybox /usr/local/bin/busybox
+
 ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp
 
-RUN yum -y install tar \
-&&  tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" \
-&&  tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin \
+RUN busybox tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" \
+&&  busybox tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin \
 &&  mkdir -p /tmdata \
 &&  adduser -d ${DEFAULT_HOME} -s /bin/bash -M -r -c "Default Time Travel User" ${DEFAULT_USER} \
-&&  yum -y erase tar \
-&&  yum clean all \
-&&  rm -rf /var/cache/yum \
+&&  rm -f /usr/local/bin/busybox \
 &&  rm -f /tmp/s6-overlay-amd64.tar.gz
 
 # -- copy from the build image
