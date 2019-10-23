@@ -5,15 +5,14 @@ FROM ubuntu:18.04
 LABEL vendor="SolutionSoft Systems, Inc"
 LABEL maintainer="kzhao@solution-soft.com"
 
-ENV LICHOST "172.0.0.1"
-ENV LICPORT "57777"
-ENV LICPASS "docker"
+ENV LICHOST=172.0.0.1 \
+    LICPORT=57777 \
+    LICPASS=docker
 
-ENV DATADIR "data"
-ENV LOGDIR  "log"
+ENV DATADIR=data \
+    LOGDIR=log
 
 ARG S6_OVERLAY_VERSION=v1.22.1.0
-ARG TM_LINUX_VERSION=12.9R3
 
 ARG DEFAULT_USER=time-traveler
 ARG DEFAULT_HOME=/home/time-traveler

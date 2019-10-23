@@ -5,12 +5,16 @@ FROM registry.access.redhat.com/ubi8/ubi
 LABEL vendor="SolutionSoft Systems, Inc"
 LABEL maintainer="kzhao@solution-soft.com"
 
-ENV LICHOST "172.0.0.1"
-ENV LICPORT "57777"
-ENV LICPASS "docker"
+ENV LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8 \
+    PIP_NO_CACHE_DIR=off
 
-ENV DATADIR "data"
-ENV LOGDIR  "log"
+ENV LICHOST=172.0.0.1 \
+    LICPORT=57777 \
+    LICPASS=docker
+
+ENV DATADIR=data \
+    LOGDIR=log
 
 ARG S6_OVERLAY_VERSION=v1.22.1.0
 
