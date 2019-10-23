@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv sh
+
+set -e
+
+/usr/local/bin/tmlicd

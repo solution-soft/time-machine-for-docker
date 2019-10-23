@@ -1,9 +1,12 @@
-#!/bin/sh
+#!/usr/bin/with-contenv sh
 
 set -e
 
-TMAGENT_DATADIR=${TMAGENT_DATADIR:-/tmdata/data}
-TMAGENT_LOGDIR=${TMAGENT_LOGDIR:-/tmdata/log}
+DATADIR=${DATADIR:-data}
+LOGDIR=${LOGDIR:-log}
+
+TMAGENT_DATADIR="/tmdata/${DATADIR}"
+TMAGENT_LOGDIR="/tmdata/${LOGDIR}"
 
 # Fix permissions for the running environment
 [ -d $TMAGENT_DATADIR ] || (mkdir -p $TMAGENT_DATADIR && chown -R root:root $TMAGENT_DATADIR)

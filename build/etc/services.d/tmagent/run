@@ -1,0 +1,10 @@
+#!/usr/bin/with-contenv sh
+
+set -e
+
+# define the data and log dirs
+
+DATADIR=${DATADIR:-data}
+LOGDIR=${LOGDIR:-log}
+
+env TMAGENT_DATADIR="/tmdata/$DATADIR" TMAGENT_LOGDIR="/tmdata/$LOGDIR" /etc/ssstm/tmagent/tmagent
