@@ -1,4 +1,4 @@
-FROM solutionsoft/timemachine-for-centos7:latest AS build
+FROM solutionsoft/time-machine-for-centos7:latest AS build
 
 FROM ubuntu:18.04
 
