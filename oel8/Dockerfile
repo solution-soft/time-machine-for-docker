@@ -19,10 +19,14 @@ ARG DEFAULT_HOME=/home/time-traveler
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp
 
-RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" \
+RUN yum -y install tar \
+&&  tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" \
 &&  tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin \
 &&  mkdir -p /tmdata \
 &&  adduser -d ${DEFAULT_HOME} -s /bin/bash -M -r -c "Default Time Travel User" ${DEFAULT_USER} \
+&&  yum -y erase tar \
+&&  yum clean all \
+&&  rm -rf /var/cache/yum \
 &&  rm -f /tmp/s6-overlay-amd64.tar.gz
 
 # -- copy from the build image
