@@ -19,7 +19,7 @@ ARG S6_OVERLAY_VERSION=v1.22.1.0
 ARG DEFAULT_USER=time-traveler
 ARG DEFAULT_HOME=/home/time-traveler
 
-# -- copy 'tar' from busybox
+# -- copy 'busybox' from busybox, we need 'tar'
 COPY --from=toolbox /bin/busybox /usr/local/bin/busybox
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp
