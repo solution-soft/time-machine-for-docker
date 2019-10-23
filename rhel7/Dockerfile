@@ -20,6 +20,8 @@ ARG DEFAULT_HOME=/home/time-traveler
 ARG S6_OVERLAY_VERSION=v1.22.1.0
 ARG TM_LINUX_VERSION=12.9R3
 
+user root
+
 ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp
 
 RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" \
