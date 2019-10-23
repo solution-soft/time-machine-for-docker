@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/rhscl/python-36-rhel7
+FROM registry.access.redhat.com/ubi7/ubi
 
 LABEL vendor="SolutionSoft Systems, Inc"
 LABEL maintainer="kzhao@solution-soft.com"
