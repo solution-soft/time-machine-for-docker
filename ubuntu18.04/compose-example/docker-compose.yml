@@ -3,7 +3,7 @@ version: '3.1'
 services:
   tm:
     container_name: tm-for-ubuntu18.04
-    image: solutionsoft/timemachine-for-ubuntu18.04:latest
+    image: solutionsoft/time-machine-for-ubuntu18.04:latest
     restart: always
     environment:
       - TM_LICHOST=192.168.20.112

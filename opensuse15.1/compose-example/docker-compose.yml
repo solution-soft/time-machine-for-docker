@@ -3,7 +3,7 @@ version: '3.1'
 services:
   tm:
     container_name: tm-for-opensuse15.1
-    image: solutionsoft/timemachine-for-opensuse15.1:latest
+    image: solutionsoft/time-machine-for-opensuse15.1:latest
     restart: always
     environment:
       - TM_LICHOST=192.168.20.112
