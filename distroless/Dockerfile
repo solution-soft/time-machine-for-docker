@@ -37,6 +37,7 @@ RUN (cd /bin; \
      ln -fs busybox sh; \
      ln -fs busybox ls; \
      ln -fs busybox ps; \
+     ln -fs busybox ip; \
      ln -fs busybox chown; \
      ln -fs busybox chmod; \
      ln -fs busybox cut; \
@@ -47,7 +48,7 @@ RUN (cd /bin; \
      ln -fs busybox wc; \
      ln -fs busybox sort) \
 &&  busybox tar xzf /tmp/s6-overlay-amd64.tar.gz -C / \
-&&  busybox ln -s /bin/busybox /sbin/ip \
+&&  busybox ln -s /bin/ip /sbin/ip \
 &&  mkdir -p /tmdata \ 
 &&  rm -f /tmp/s6-overlay-amd64.tar.gz
 
