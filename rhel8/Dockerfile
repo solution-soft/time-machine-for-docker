@@ -1,5 +1,7 @@
 FROM solutionsoft/time-machine-for-rhel7:latest AS master
 
+FROM busybox:glibc AS toolbox
+
 FROM registry.access.redhat.com/ubi8/ubi
 
 LABEL vendor="SolutionSoft Systems, Inc"
@@ -19,8 +21,11 @@ ARG S6_OVERLAY_VERSION=v1.22.1.0
 ARG DEFAULT_USER=time-traveler
 ARG DEFAULT_HOME=/home/time-traveler
 
-# -- copy from the build image
+# -- copy from the master image
 COPY --from=master /etc/ssstm /etc/ssstm
+
+# -- need ip from toolbox image
+COPY --from=toolbox /bin/ip /usr/local/bin/ip
 
 # -- updated preloading lib for TM
 COPY ./preload /etc/ssstm/
