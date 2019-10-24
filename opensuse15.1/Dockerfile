@@ -1,6 +1,6 @@
 FROM solutionsoft/time-machine-for-centos7:latest AS build
 
-FROM busybox:1.30.1-musl AS toolbox
+FROM busybox:1.30.1-glibc AS toolbox
 
 FROM opensuse/leap:15.1
 
