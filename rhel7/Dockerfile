@@ -15,9 +15,17 @@ ARG DEFAULT_HOME=/home/time-traveler
 
 ARG S6_OVERLAY_VERSION=v1.22.1.0
 ARG TM_LINUX_VERSION=12.9R3
+ARG TMAGENT_VERSION=11.04r65
 
 user root
 
+# -- docker image build files
+COPY build /
+
+# -- copy update TMAgent release
+COPY extras/tmagent-linux-x64-${TMAGENT_VERSION}.zip /tmp/tmagent-linux.zip
+
+# -- copy S6 overlay dist file
 ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp
 
 RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" \
@@ -27,12 +35,10 @@ RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" \
 &&  tar xzf /tmp/tm_linux.tgz -C /tmp/build \
 &&  (cd /tmp/build; ./ssstm_install.sh tm_linux_2.6.up_x86_64-${TM_LINUX_VERSION}.rpm) \
 &&  (cd /etc/ssstm/extras; rm -f .tm*.tgz Makefile.re) \
+&&  (cd /etc/ssstm; unzip -o /tmp/tmagent-linux.zip) \
 &&  mkdir -p /tmdata \
 &&  adduser -d ${DEFAULT_HOME} -s /bin/bash -M -r -c "Default Time Travel User" ${DEFAULT_USER} \
-&&  rm -rf /tmp/s6-overlay-amd64.tar.gz /tmp/tm_linux.tgz /tmp/build
-
-# -- docker image build files
-COPY build /
+&&  rm -rf /tmp/s6-overlay-amd64.tar.gz /tmp/tm_linux.tgz /tmp/tmagent-linux.zip /tmp/build
 
 # -- expose tmagent listening port
 EXPOSE 7800
