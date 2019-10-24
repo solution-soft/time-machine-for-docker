@@ -2,6 +2,8 @@ FROM solutionsoft/time-machine-for-centos7:latest AS master
 
 FROM busybox:musl AS toolbox
 
+FROM gcr.io/distroless/java:8 AS javaimg
+
 FROM gcr.io/distroless/base
 
 ENV LICHOST=172.0.0.1 \
@@ -48,6 +50,10 @@ RUN (cd /bin; \
 &&  busybox ln -s /bin/busybox /sbin/ip \
 &&  mkdir -p /tmdata \ 
 &&  rm -f /tmp/s6-overlay-amd64.tar.gz
+
+# distroless base image lacks libz.so, so we will copy from the distroless java image
+COPY --from=javaimg /lib/x86_64-linux-gnu/libz.so.1.2.8  /lib/x86_64-linux-gnu/libz.so.1.2.8
+RUN  (cd /lib/x86_64-linux-gnu; ln -fs libz.so.1.2.8 libz.so.1)
 
 # -- prepare the preloading lib
 RUN echo "/etc/ssstm/lib64/libssstm.so.1.0" >> /etc/ld.so.preload

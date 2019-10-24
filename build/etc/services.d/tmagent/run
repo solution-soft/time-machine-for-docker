@@ -7,4 +7,6 @@ set -e
 DATADIR=${DATADIR:-data}
 LOGDIR=${LOGDIR:-log}
 
-env TMAGENT_DATADIR="/tmdata/$DATADIR" TMAGENT_LOGDIR="/tmdata/$LOGDIR" /etc/ssstm/tmagent/tmagent
+export TMAGENT_DATADIR="/tmdata/$DATADIR" TMAGENT_LOGDIR="/tmdata/$LOGDIR"
+
+exec /etc/ssstm/tmagent/tmagent
