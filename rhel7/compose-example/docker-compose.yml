@@ -9,6 +9,7 @@ services:
       - TM_LICHOST=192.168.20.112
       - TM_LICPORT=57777
       - TM_LICPASS=docker
+      - TZ=America/Los_Angeles
     ports:
       - "7800:7800"
     volumes:

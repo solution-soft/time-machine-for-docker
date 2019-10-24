@@ -38,6 +38,7 @@ COPY --from=toolbox /bin/busybox /usr/local/bin/busybox
 
 # -- copy from the build image
 COPY --from=build /etc/ssstm /etc/ssstm
+COPY --from=build /usr/local/bin/tmlicd /usr/local/bin/tmlicd
 
 # -- updated preloading lib for TM
 COPY preload /etc/ssstm/
