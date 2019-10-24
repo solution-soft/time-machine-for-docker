@@ -1,6 +1,6 @@
 FROM busybox:1.30.1-glibc AS toolbox
 
-FROM centos:centos7 AS build
+FROM centos:centos7 AS master
 
 ARG TM_LINUX_VERSION=12.9R3
 
@@ -36,7 +36,7 @@ ARG TMAGENT_VERSION=11.04r65
 COPY --from=toolbox /bin/busybox /usr/local/bin/busybox
 
 # -- copy from the build image
-COPY --from=build /etc/ssstm /etc/ssstm
+COPY --from=master /etc/ssstm /etc/ssstm
 
 # -- updated preloading lib for TM
 COPY ./preload /etc/ssstm/

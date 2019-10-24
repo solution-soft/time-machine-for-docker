@@ -1,4 +1,4 @@
-FROM solutionsoft/time-machine-for-centos7:latest AS build
+FROM solutionsoft/time-machine-for-centos7:latest AS master
 
 FROM oraclelinux:7
 
@@ -20,8 +20,7 @@ ARG DEFAULT_USER=time-traveler
 ARG DEFAULT_HOME=/home/time-traveler
 
 # -- copy from the build image
-COPY --from=build /etc/ssstm /etc/ssstm
-COPY --from=build /usr/local/bin/tmlicd /usr/local/bin/tmlicd
+COPY --from=master /etc/ssstm /etc/ssstm
 
 # -- updated preloading lib for TM
 COPY ./preload /etc/ssstm/

@@ -21,7 +21,6 @@ ARG DEFAULT_HOME=/home/time-traveler
 
 # -- copy from the build image
 COPY --from=master /etc/ssstm /etc/ssstm
-COPY --from=master /usr/local/bin/tmlicd /usr/local/bin/tmlicd
 
 # -- updated preloading lib for TM
 COPY ./preload /etc/ssstm/

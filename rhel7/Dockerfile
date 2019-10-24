@@ -1,6 +1,6 @@
 FROM busybox:1.30.1-glibc AS toolbox
 
-FROM registry.access.redhat.com/ubi7/ubi as build
+FROM registry.access.redhat.com/ubi7/ubi as master
 
 ARG TM_LINUX_VERSION=12.9R3
 
@@ -37,7 +37,7 @@ user root
 COPY --from=toolbox /bin/busybox /usr/local/bin/busybox
 
 # -- copy from the build image
-COPY --from=build /etc/ssstm /etc/ssstm
+COPY --from=master /etc/ssstm /etc/ssstm
 
 # -- updated preloading lib for TM
 COPY ./preload /etc/ssstm/
