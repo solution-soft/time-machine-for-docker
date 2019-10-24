@@ -1,4 +1,4 @@
-FROM busybox:1.30.1-glibc AS toolbox
+FROM busybox:musl AS toolbox
 
 FROM registry.access.redhat.com/ubi7/ubi as master
 
@@ -33,11 +33,11 @@ ARG TMAGENT_VERSION=11.04r65
 
 user root
 
+# -- copy from the master image
+COPY --from=master /etc/ssstm /etc/ssstm
+
 # -- copy 'busybox' from busybox
 COPY --from=toolbox /bin/busybox /usr/local/bin/busybox
-
-# -- copy from the build image
-COPY --from=master /etc/ssstm /etc/ssstm
 
 # -- updated preloading lib for TM
 COPY ./preload /etc/ssstm/
@@ -54,9 +54,9 @@ ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY
 RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" \
 &&  tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin \
 &&  (cd /etc/ssstm; busybox unzip -o /tmp/tmagent-linux.zip) \
+&&  ln -s /usr/local/bin/busybox /sbin/ip \
 &&  mkdir -p /tmdata \
 &&  adduser -d ${DEFAULT_HOME} -s /bin/bash -M -r -c "Default Time Travel User" ${DEFAULT_USER} \
-&&  rm -f /usr/local/bin/busybox \
 &&  rm -rf /tmp/s6-overlay-amd64.tar.gz /tmp/tm_linux.tgz /tmp/tmagent-linux.zip /tmp/build
 
 # -- setup preloading

@@ -1,4 +1,4 @@
-FROM busybox:1.30.1-glibc AS toolbox
+FROM busybox:musl AS toolbox
 
 FROM centos:centos7 AS master
 
@@ -53,9 +53,9 @@ ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY
 RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" \
 &&  tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin \
 &&  (cd /etc/ssstm; busybox unzip -o /tmp/tmagent-linux.zip) \
+&&  ln -s /usr/local/bin/busybox /sbin/ip \
 &&  mkdir -p /tmdata \
 &&  adduser -d ${DEFAULT_HOME} -s /bin/bash -M -r -c "Default Time Travel User" ${DEFAULT_USER} \
-&&  rm -f /usr/local/bin/busybox \
 &&  rm -rf /tmp/s6-overlay-amd64.tar.gz /tmp/tmagent-linux.zip /tmp/build
 
 # -- setup preloading

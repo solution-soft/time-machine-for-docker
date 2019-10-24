@@ -1,6 +1,6 @@
 FROM solutionsoft/time-machine-for-centos7:latest AS master
 
-FROM busybox:1.30.1-musl AS toolbox
+FROM busybox: AS toolbox
 
 FROM oraclelinux:8
 
@@ -39,7 +39,6 @@ RUN busybox tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" \
 &&  busybox tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin \
 &&  mkdir -p /tmdata \
 &&  adduser -d ${DEFAULT_HOME} -s /bin/bash -M -r -c "Default Time Travel User" ${DEFAULT_USER} \
-&&  rm -f /usr/local/bin/busybox \
 &&  rm -f /tmp/s6-overlay-amd64.tar.gz
 
 # -- setup preloading
