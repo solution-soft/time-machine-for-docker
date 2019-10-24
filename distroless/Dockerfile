@@ -4,6 +4,13 @@ FROM busybox:musl AS toolbox
 
 FROM gcr.io/distroless/java:8 AS javaimg
 
+# -- copy busybox from the busybox docker image
+COPY --from=toolbox /bin/busybox /bin/busybox
+COPY --from=toolbox /bin/sh /bin/sh
+
+# -- packup zlib shared
+RUN  (cd /; busybox tar czf /tmp/libz.tgz `find lib -type f -name libz.so\*`)
+
 FROM gcr.io/distroless/base
 
 ENV LICHOST=172.0.0.1 \
@@ -46,6 +53,9 @@ RUN (cd /bin; \
      ln -fs busybox rm; \
      ln -fs busybox mkdir; \
      ln -fs busybox wc; \
+     ln -fs busybox head; \
+     ln -fs busybox sed; \
+     ln -fs busybox awk; \
      ln -fs busybox sort) \
 &&  busybox tar xzf /tmp/s6-overlay-amd64.tar.gz -C / \
 &&  busybox ln -s /bin/ip /sbin/ip \
@@ -53,8 +63,11 @@ RUN (cd /bin; \
 &&  rm -f /tmp/s6-overlay-amd64.tar.gz
 
 # distroless base image lacks libz.so, so we will copy from the distroless java image
-COPY --from=javaimg /lib/x86_64-linux-gnu/libz.so.1.2.8  /lib/x86_64-linux-gnu/libz.so.1.2.8
-RUN  (cd /lib/x86_64-linux-gnu; ln -fs libz.so.1.2.8 libz.so.1)
+COPY --from=javaimg /tmp/libz.tgz /tmp/libz.tgz
+RUN busybox tar xzf /tmp/libz.tgz -C / \
+&&  (cd /lib/x86_64-linux-gnu; \
+     ln -fs `find . -f -name libz.so\*` libz.so.1) \
+&&  rm -f /tmp/libz.tgz
 
 # -- prepare the preloading lib
 RUN echo "/etc/ssstm/lib64/libssstm.so.1.0" >> /etc/ld.so.preload
