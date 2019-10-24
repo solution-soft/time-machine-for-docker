@@ -24,10 +24,10 @@ COPY --from=build /etc/ssstm /etc/ssstm
 COPY --from=build /usr/local/bin/tmlicd /usr/local/bin/tmlicd
 
 # -- updated preloading lib for TM
-COPY preload /etc/ssstm/
+COPY ./preload /etc/ssstm/
 
 # -- docker image build files
-COPY build /
+COPY ./build /
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp
 
