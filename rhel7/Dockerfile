@@ -8,7 +8,8 @@ ARG TM_LINUX_VERSION=12.9R3
 RUN curl -s ftp://ftp.solution-soft.com/pub/tm/linux/redhat/64bit/tm_linux_2.6.up_x86_64-${TM_LINUX_VERSION}.tgz -o /tmp/tm_linux.tgz \
 &&  mkdir -p /tmp/build \
 &&  tar xzf /tmp/tm_linux.tgz -C /tmp/build \
-&&  (cd /tmp/build; ./ssstm_install.sh tm_linux_2.6.up_x86_64-${TM_LINUX_VERSION}.rpm) \
+&&  (cd /tmp/build; \
+     ./ssstm_install.sh tm_linux_2.6.up_x86_64-${TM_LINUX_VERSION}.rpm > /dev/null 2>&1) \
 &&  (cd /etc/ssstm/extras; rm -f .tm*.tgz Makefile.re)
 
 FROM registry.access.redhat.com/ubi7/ubi
@@ -53,7 +54,7 @@ ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY
 
 RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" \
 &&  tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin \
-&&  (cd /etc/ssstm; busybox unzip -o /tmp/tmagent-linux.zip) \
+&&  (cd /etc/ssstm; busybox unzip -q -o /tmp/tmagent-linux.zip) \
 &&  ln -s /usr/local/bin/busybox /sbin/ip \
 &&  mkdir -p /tmdata \
 &&  adduser -d ${DEFAULT_HOME} -s /bin/bash -M -r -c "Default Time Travel User" ${DEFAULT_USER} \
