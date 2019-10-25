@@ -1,6 +1,6 @@
 FROM solutionsoft/time-machine-for-centos7:latest AS master
 
-FROM busybox: AS toolbox
+FROM busybox:musl AS toolbox
 
 FROM oraclelinux:8
 
