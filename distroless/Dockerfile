@@ -9,7 +9,7 @@ COPY --from=toolbox /bin/busybox /bin/busybox
 COPY --from=toolbox /bin/sh /bin/sh
 
 # -- packup zlib shared
-RUN  (cd /; busybox tar czf /tmp/libz.tgz `find lib -type f -name libz.so\*`)
+RUN  (cd /; busybox tar cf /tmp/libz.tar `busybox find lib -type f -name libz.so\*`)
 
 FROM gcr.io/distroless/base
 
@@ -63,11 +63,11 @@ RUN (cd /bin; \
 &&  rm -f /tmp/s6-overlay-amd64.tar.gz
 
 # distroless base image lacks libz.so, so we will copy from the distroless java image
-COPY --from=javaimg /tmp/libz.tgz /tmp/libz.tgz
-RUN busybox tar xzf /tmp/libz.tgz -C / \
+COPY --from=javaimg /tmp/libz.tar /tmp/libz.tar
+RUN busybox tar xf /tmp/libz.tar -C / \
 &&  (cd /lib/x86_64-linux-gnu; \
-     ln -fs `find . -f -name libz.so\*` libz.so.1) \
-&&  rm -f /tmp/libz.tgz
+     ln -fs `busybox find . -type f -name libz.so\*` libz.so.1) \
+&&  rm -f /tmp/libz.tar
 
 # -- prepare the preloading lib
 RUN echo "/etc/ssstm/lib64/libssstm.so.1.0" >> /etc/ld.so.preload
