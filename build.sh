@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -ex
+
+MACHINES="centos7 centos8 rhel7 rhel8 oraclelinux7 oraclelinux8 ubuntu18.04 opensuse15.1 distroless"
+
+if [ $# -gt 0 ]; then
+    MACHINES=$*
+fi
+
+MACHINES=$(echo $MACHINES | xargs -n1 | sort | uniq | xargs)
+
+for n in $MACHINES; do
+    if [ -d $n ]; then
+	echo "Build TimeMachine docker image for $n .."
+
+	docker build --compress --rm --pull \
+	    -t solutionsoft/${n}:latest \
+	    . -f ${n}/Dockerfile
+    fi
+done
+
+exit 0
