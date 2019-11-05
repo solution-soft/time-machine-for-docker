@@ -2,6 +2,8 @@ FROM solutionsoft/time-machine-for-centos7:latest AS master
 
 FROM busybox:musl AS toolbox
 
+FROM centos:8 AS reference
+
 FROM oraclelinux:8
 
 LABEL vendor="SolutionSoft Systems, Inc"
@@ -23,6 +25,9 @@ ARG DEFAULT_HOME=/home/time-traveler
 
 # -- copy 'busybox' from busybox, we need 'tar'
 COPY --from=toolbox /bin/busybox /usr/local/bin/busybox
+
+# -- copy '/usr/share/zoneinfo' from reference, to fix timezone issue.
+COPY --from=reference /usr/share/zoneinfo /usr/share/zoneinfo
 
 # -- copy from the build image
 COPY --from=master /etc/ssstm /etc/ssstm
