@@ -2,7 +2,7 @@ FROM busybox:musl AS toolbox
 
 FROM centos:centos7 AS master
 
-ARG TM_LINUX_VERSION=12.9R3
+ARG TM_LINUX_VERSION=12.10R1
 
 # -- install TM on a fresh centos 7 host
 

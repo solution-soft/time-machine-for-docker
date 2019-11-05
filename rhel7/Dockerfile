@@ -2,7 +2,7 @@ FROM busybox:musl AS toolbox
 
 FROM registry.access.redhat.com/ubi7/ubi as master
 
-ARG TM_LINUX_VERSION=12.9R3
+ARG TM_LINUX_VERSION=12.10R1
 
 # -- install TM on a fresh rhel 7 host
 RUN curl -s ftp://ftp.solution-soft.com/pub/tm/linux/redhat/64bit/tm_linux_2.6.up_x86_64-${TM_LINUX_VERSION}.tgz -o /tmp/tm_linux.tgz \
