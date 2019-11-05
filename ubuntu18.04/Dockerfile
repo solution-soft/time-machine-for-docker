@@ -38,7 +38,7 @@ RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / \
 &&  mkdir -p /tmdata \
 &&  useradd -r -m -d ${DEFAULT_HOME} -s /bin/bash -c "Default Time Travel User" ${DEFAULT_USER} \
 &&  rm -f /tmp/s6-overlay-amd64.tar.gz \
-&&  rm -rf /var/lib/apt/lists/* \
+&&  rm -rf /var/lib/apt/lists/*
 
 # -- setup preloading
 RUN  echo "/etc/ssstm/lib64/libssstm.so.1.0" >> /etc/ld.so.preload
