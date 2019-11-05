@@ -1,7 +1,5 @@
 FROM solutionsoft/time-machine-for-centos7:latest AS master
 
-FROM busybox:musl AS toolbox
-
 FROM ubuntu:18.04
 
 LABEL vendor="SolutionSoft Systems, Inc"
@@ -24,9 +22,6 @@ ARG DEFAULT_HOME=/home/time-traveler
 # -- copy from the master image
 COPY --from=master /etc/ssstm /etc/ssstm
 
-# -- need ip from toolbox image
-COPY --from=toolbox /bin/busybox /usr/local/bin/busybox
-
 # -- updated preloading lib for TM
 COPY ./preload /etc/ssstm/
 
@@ -37,10 +32,13 @@ COPY ./build /
 ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp
 
 RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / \
-&&  ln -s /usr/local/bin/busybox /sbin/ip \
+&&  apt-get update \
+&&  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    tzdata iproute2 \
 &&  mkdir -p /tmdata \
 &&  useradd -r -m -d ${DEFAULT_HOME} -s /bin/bash -c "Default Time Travel User" ${DEFAULT_USER} \
-&&  rm -f /tmp/s6-overlay-amd64.tar.gz
+&&  rm -f /tmp/s6-overlay-amd64.tar.gz \
+&&  rm -rf /var/lib/apt/lists/* \
 
 # -- setup preloading
 RUN  echo "/etc/ssstm/lib64/libssstm.so.1.0" >> /etc/ld.so.preload
