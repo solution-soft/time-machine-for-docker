@@ -2,6 +2,8 @@ FROM solutionsoft/time-machine-for-centos7:latest AS master
 
 FROM busybox:musl AS toolbox
 
+FROM centos:7 AS reference
+
 FROM opensuse/leap:15.1
 
 LABEL vendor="SolutionSoft Systems, Inc"
@@ -21,11 +23,14 @@ ARG S6_OVERLAY_VERSION=v1.22.1.0
 ARG DEFAULT_USER=time-traveler
 ARG DEFAULT_HOME=/home/time-traveler
 
-# -- copy from the master image
-COPY --from=master /etc/ssstm /etc/ssstm
-
 # -- copy 'busybox' from busybox, we need 'tar and gzip'
 COPY --from=toolbox /bin/busybox /usr/local/bin/busybox
+
+# -- copy '/usr/share/zoneinfo' from reference, to fix timezone issue.
+COPY --from=reference /usr/share/zoneinfo /usr/share/zoneinfo
+
+# -- copy from the master image
+COPY --from=master /etc/ssstm /etc/ssstm
 
 # -- updated preloading lib for TM
 COPY ./preload /etc/ssstm/
