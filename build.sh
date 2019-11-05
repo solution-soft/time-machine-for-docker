@@ -14,8 +14,8 @@ for n in $MACHINES; do
     if [ -d $n ]; then
 	echo "Build TimeMachine docker image for $n .."
 
-	docker build --compress --rm --pull \
-	    -t solutionsoft/${n}:latest \
+	docker build --compress --rm --no-cache \
+	    -t "solutionsoft/time-machine-for-${n}:latest" \
 	    . -f ${n}/Dockerfile
     fi
 done
