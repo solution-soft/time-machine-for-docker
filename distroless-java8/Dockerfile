@@ -8,7 +8,7 @@ RUN set -ex \
 &&  apt-get update \
 &&  apt-get install busybox
 
-FROM gcr.io/distroless/java:8 AS javaimg
+FROM gcr.io/distroless/java:8
 
 ARG S6_OVERLAY_VERSION=v1.22.1.0
 
