@@ -4,6 +4,11 @@ FROM debian:stretch AS toolbox
 
 # gcr:8 is based on debian stretch
 
+RUN set -ex \
+&&  apt-get update \
+&&  apt-get install busybox
+
+
 FROM gcr.io/distroless/java:8 AS javaimg
 
 # -- copy busybox from the busybox docker image
