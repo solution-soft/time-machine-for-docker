@@ -1,6 +1,8 @@
 FROM solutionsoft/time-machine-for-centos7:latest AS master
 
-FROM busybox:musl AS toolbox
+FROM debian:stretch AS toolbox
+
+# gcr:8 is based on debian stretch
 
 FROM gcr.io/distroless/java:8 AS javaimg
 
