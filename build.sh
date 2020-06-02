@@ -2,7 +2,7 @@
 
 set -ex
 
-MACHINES="centos7 centos8 rhel7 rhel8 oraclelinux7 oraclelinux8 ubuntu18.04 opensuse15.1 distroless"
+MACHINES="centos7 centos8 rhel7 rhel8 oraclelinux7 oraclelinux8 ubuntu16.04 ubuntu18.04 opensuse15.1 distroless distroless-java8"
 
 if [ $# -gt 0 ]; then
     MACHINES=$*
@@ -14,7 +14,7 @@ for n in $MACHINES; do
     if [ -d $n ]; then
 	echo "Build TimeMachine docker image for $n .."
 
-	docker build --compress --rm --no-cache \
+	docker build --compress --rm \
 	    -t "solutionsoft/time-machine-for-${n}:latest" \
 	    . -f ${n}/Dockerfile
     fi
