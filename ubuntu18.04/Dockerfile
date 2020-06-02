@@ -1,9 +1,3 @@
-FROM solutionsoft/time-machine-for-centos7:latest AS master
-
-FROM busybox:musl AS toolbox
-
-FROM centos:7 AS reference
-
 FROM ubuntu:18.04
 
 LABEL vendor="SolutionSoft Systems, Inc"
@@ -18,37 +12,33 @@ ENV DATADIR=data \
 
 ENV TZ=America/Los_Angeles
 
-ARG S6_OVERLAY_VERSION=v1.22.1.0
-
 ARG DEFAULT_USER=time-traveler
 ARG DEFAULT_HOME=/home/time-traveler
 
-# -- need ip from toolbox image
-COPY --from=toolbox /bin/busybox /usr/local/bin/busybox
+ARG S6_OVERLAY_VERSION=v2.0.0.1
+ARG TM_LINUX_VERSION=12.10R4
 
-# -- copy '/usr/share/zoneinfo' from reference, to fix timezone issue.
-COPY --from=reference /usr/share/zoneinfo /usr/share/zoneinfo
+# For installing software packages
+USER root
 
-# -- copy from the master image
-COPY --from=master /etc/ssstm /etc/ssstm
-
-# -- updated preloading lib for TM
-COPY ./preload /etc/ssstm/
-
-# -- docker image build files
-COPY ./build /
-
-# -- add S6-overlay package
+# -- copy S6 overlay dist file
 ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp
 
-RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / \
-&&  ln -s /usr/local/bin/busybox /sbin/ip \
-&&  mkdir -p /tmdata \
-&&  useradd -r -m -d ${DEFAULT_HOME} -s /bin/bash -c "Default Time Travel User" ${DEFAULT_USER} \
-&&  rm -f /tmp/s6-overlay-amd64.tar.gz
+COPY ./tmbase-${TM_LINUX_VERSION}.tgz /tmp/tmbase.tgz
+COPY ./build /
 
-# -- setup preloading
-RUN  echo "/etc/ssstm/lib64/libssstm.so.1.0" >> /etc/ld.so.preload
+RUN set -ex \
+&&  apt-get update \
+&&  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends iproute2 \
+&&  apt-get clean \
+&&  rm -rf /var/lib/apt/lists/* \
+&&  tar xzf /tmp/s6-overlay-amd64.tar.gz -C / \
+&&  rm -f /tmp/s6-overlay-amd64.tar.gz \
+&&  tar xzf /tmp/tmbase.tgz -C / \
+&&  rm -f /tmp/tmbase.tgz \
+&&  echo "/etc/ssstm/lib64/libssstm.so.1.0" >> /etc/ld.so.preload \
+&&  mkdir -p /tmdata \
+&&  useradd -r -m -d ${DEFAULT_HOME} -s /bin/bash -c "Default Time Travel User" ${DEFAULT_USER}
 
 # -- expose tmagent listening port
 EXPOSE 7800
