@@ -1,0 +1,16 @@
+version: '3.1'
+
+services:
+  tm:
+    container_name: tm-for-ubuntu18.04
+    image: solutionsoft/time-machine-for-ubuntu18.04:latest
+    restart: always
+    environment:
+      - TM_LICHOST=192.168.20.112
+      - TM_LICPORT=57777
+      - TM_LICPASS=docker
+      - TZ=America/Los_Angeles
+    ports:
+      - "7800:7800"
+    volumes:
+      - "./tmdata:/tmdata"
