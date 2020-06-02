@@ -1,6 +1,6 @@
 FROM busybox:1.30.1-musl AS toolbox
 
-FROM gcr.io/distroless/java:8 AS javaimg
+FROM gcr.io/distroless/java:latest AS javaimg
 
 # -- copy busybox from the busybox docker image
 COPY --from=toolbox /bin/busybox /bin/busybox
@@ -9,7 +9,7 @@ COPY --from=toolbox /bin/sh /bin/sh
 # -- packup zlib shared
 RUN  (cd /; busybox tar cf /tmp/libz.tar `busybox find lib -name libz.so\*`)
 
-FROM gcr.io/distroless/base
+FROM gcr.io/distroless/base:latest
 
 LABEL vendor="SolutionSoft Systems, Inc"
 LABEL maintainer="kzhao@solution-soft.com"
