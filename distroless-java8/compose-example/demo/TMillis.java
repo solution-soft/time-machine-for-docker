@@ -2,11 +2,12 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class TMillis {
     public static void main(String[] args) {
 	Calendar calendar = Calendar.getInstance();
-	DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+	DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss Z", Locale.getDefault());
 	
 	for (;;) {
 	    long timeStamp = System.currentTimeMillis();
@@ -16,7 +17,6 @@ public class TMillis {
 	    String strNow = dateFormat.format(now);  
 		    
 	    System.out.println("Millis: " + timeStamp + "; Date: " + strNow);
-		    
 	
 	    try {
 		Thread.sleep(1000, 0);	//sleep for 1000 ms
