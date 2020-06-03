@@ -29,7 +29,7 @@ COPY ./build /
 
 RUN set -ex \
 &&  apt-get update \
-&&  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends iproute2 \
+&&  DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends iproute2 tzdata \
 &&  apt-get clean \
 &&  rm -rf /var/lib/apt/lists/* \
 &&  tar xzf /tmp/s6-overlay-amd64.tar.gz -C / \

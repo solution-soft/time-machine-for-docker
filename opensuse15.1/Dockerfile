@@ -28,7 +28,7 @@ COPY ./tmbase-${TM_LINUX_VERSION}.tgz /tmp/tmbase.tgz
 COPY ./build /
 
 RUN set -ex \
-&&  zypper install -y iproute2 tar gzip \
+&&  zypper install -y iproute2 tar gzip tzdata \
 &&  tar xzf /tmp/s6-overlay-amd64.tar.gz -C / \
 &&  rm -f /tmp/s6-overlay-amd64.tar.gz \
 &&  tar xzf /tmp/tmbase.tgz -C / \

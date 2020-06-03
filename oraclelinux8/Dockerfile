@@ -26,7 +26,7 @@ ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY
 COPY ./tmbase-${TM_LINUX_VERSION}.tgz /tmp/tmbase.tgz
 COPY ./build /
 
-RUN yum -y install tar && yum clean all \
+RUN yum -y install tar tzdata && yum clean all \
 &&  tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude='./bin' && tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin \
 &&  rm -f /tmp/s6-overlay-amd64.tar.gz \
 &&  tar xzf /tmp/tmbase.tgz -C / \
