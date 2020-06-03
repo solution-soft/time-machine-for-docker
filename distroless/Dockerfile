@@ -39,6 +39,9 @@ COPY --from=toolbox /bin/sh /bin/sh
 # distroless base image lacks libz.so, so we will copy from the distroless java image
 COPY --from=javaimg /tmp/libz.tar /tmp/libz.tar
 
+# copy timezone info from java image
+COPY --from=javaimg /usr/share/zoneinfo /usr/share
+
 RUN (cd /bin; \
      busybox ln -fs busybox ln; \
      ln -fs busybox sh; \
