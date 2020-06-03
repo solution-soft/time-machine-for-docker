@@ -22,6 +22,7 @@ ADD  https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLA
 # -- copy TM base img and S6 service scripts
 COPY ./tmbase-${TM_LINUX_VERSION}.tgz /tmp/tmbase.tgz
 COPY ./build /
+COPY ./distroless-java8/start /
 
 # -- copy busybox from the busybox docker image
 COPY --from=toolbox /bin/busybox /bin/busybox
@@ -61,5 +62,4 @@ EXPOSE 7800
 VOLUME /tmdata
 
 
-ENTRYPOINT ["/init"]
-CMD ["/usr/bin/java"]
+ENTRYPOINT ["/init", "/start"]
