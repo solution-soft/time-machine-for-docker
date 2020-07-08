@@ -4,6 +4,8 @@ set -ex
 
 MACHINES="centos7 centos8 rhel7 rhel8 oraclelinux7 oraclelinux8 ubuntu16.04 ubuntu18.04 opensuse15.1 distroless distroless-java8"
 
+TAGNAME="12.10R5-build01"
+
 if [ $# -gt 0 ]; then
     MACHINES=$*
 fi
@@ -16,6 +18,7 @@ for n in $MACHINES; do
 
 	docker build --compress --rm \
 	    -t "solutionsoft/time-machine-for-${n}:latest" \
+	    -t "solutionsoft/time-machine-for-${n}:${TAGNAME}" \
 	    . -f ${n}/Dockerfile
     fi
 done
