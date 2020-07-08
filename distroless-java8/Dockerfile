@@ -1,5 +1,3 @@
-FROM solutionsoft/time-machine-for-centos7:latest AS master
-
 FROM debian:stretch AS toolbox
 
 # gcr:8 for java is based on debian stretch
@@ -27,6 +25,35 @@ COPY ./build /
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp
 
+
+FROM gcr.io/distroless/java:latest
+
+LABEL vendor="SolutionSoft Systems, Inc"
+LABEL maintainer="kzhao@solution-soft.com"
+
+ENV LICHOST=172.0.0.1 \
+    LICPORT=57777 \
+    LICPASS=docker
+
+ENV DATADIR=data \
+    LOGDIR=log
+
+ENV TZ=America/Los_Angeles
+
+ARG S6_OVERLAY_VERSION=v2.0.0.1
+ARG TM_LINUX_VERSION=12.10R5
+
+ADD  https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp
+
+# -- copy TM base img and S6 service scripts
+COPY ./tmbase-${TM_LINUX_VERSION}.tgz /tmp/tmbase.tgz
+COPY ./build /
+COPY ./distroless-java8/start /
+
+# -- copy busybox from the busybox docker image
+COPY --from=toolbox /bin/busybox /bin/busybox
+COPY --from=toolbox /bin/sh /bin/sh
+
 RUN (cd /bin; \
      busybox ln -fs busybox ln; \
      ln -fs busybox sh; \
@@ -46,16 +73,19 @@ RUN (cd /bin; \
      ln -fs busybox awk; \
      ln -fs busybox sort) \
 &&  busybox tar xzf /tmp/s6-overlay-amd64.tar.gz -C / \
-&&  busybox ln -s /bin/ip /sbin/ip \
-&&  mkdir -p /tmdata \
-&&  rm -f /tmp/s6-overlay-amd64.tar.gz
+&&  busybox tar xzf /tmp/tmbase.tgz \
+&&  rm -f /tmp/s6-overlay-amd64.tar.gz /tmp/tmbase.tgz \
+&&  echo "/etc/ssstm/lib64/libssstm.so.1.0" >> /etc/ld.so.preload \
+&&  mkdir -p /tmdata
 
-# -- prepare the preloading lib
-RUN echo "/etc/ssstm/lib64/libssstm.so.1.0" >> /etc/ld.so.preload
+# -- distroless has a 'nonroot' user account
+# no time machine specific user account will be created
 
-EXPOSE	7800
+# -- expose tmagent listening port
+EXPOSE 7800
 
-# -- TMAgent data will be saved under /tmdata/data and logs are under /tmdata/log
-VOLUME	/tmdata
+# -- where TM data stores
+VOLUME /tmdata
 
-ENTRYPOINT ["/init"]
+
+ENTRYPOINT ["/init", "/start"]

@@ -1,0 +1,5 @@
+#!/bin/execlineb
+elgetpositionals
+emptyenv -P
+s6-setuidgid nonroot
+/usr/bin/java -jar $@

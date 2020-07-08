@@ -1,5 +1,3 @@
-FROM  solutionsoft/time-machine-for-centos7:latest AS master
-
 FROM centos:centos8
 
 LABEL vendor="SolutionSoft Systems, Inc"
@@ -14,29 +12,29 @@ ENV DATADIR=data \
 
 ENV TZ=America/Los_Angeles
 
-ARG S6_OVERLAY_VERSION=v1.22.1.0
-
 ARG DEFAULT_USER=time-traveler
 ARG DEFAULT_HOME=/home/time-traveler
 
-# -- copy from the build image
-COPY --from=master /etc/ssstm /etc/ssstm
+ARG S6_OVERLAY_VERSION=v2.0.0.1
+ARG TM_LINUX_VERSION=12.10R5
 
-# -- updated preloading lib for TM
-COPY ./preload /etc/ssstm/
+# For installing software packages
+USER root
 
-# -- docker image build files
-COPY ./build /
-
+# -- copy S6 overlay dist file
 ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp
 
-RUN tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude="./bin" \
-&&  tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin \
+COPY ./tmbase-${TM_LINUX_VERSION}.tgz /tmp/tmbase.tgz
+COPY ./build /
+
+RUN yum -y install iproute tzdata && yum clean all \
+&&  tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude='./bin' && tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin \
+&&  rm -f /tmp/s6-overlay-amd64.tar.gz \
+&&  tar xzf /tmp/tmbase.tgz -C / \
+&&  rm -f /tmp/tmbase.tgz \
+&&  echo "/etc/ssstm/\$LIB/libssstm.so.1.0" >> /etc/ld.so.preload \
 &&  mkdir -p /tmdata \
 &&  adduser -d ${DEFAULT_HOME} -s /bin/bash -M -r -c "Default Time Travel User" ${DEFAULT_USER}
-
-# -- setup preloading
-RUN  echo "/etc/ssstm/\$LIB/libssstm.so.1.0" >> /etc/ld.so.preload
 
 # -- expose tmagent listening port
 EXPOSE 7800

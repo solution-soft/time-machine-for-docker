@@ -1,6 +1,7 @@
 version: '3.1'
 
 services:
+<<<<<<< HEAD
   tm:
     container_name: tm-for-distroless-java8
     image: solutionsoft/time-machine-for-distroless-java8:latest
@@ -12,5 +13,20 @@ services:
       - TZ=America/Los_Angeles
     ports:
       - "7800:7800"
+=======
+  demo:
+    build:
+      context: ./demo
+    container_name: time-machine-for-distroless-java8-demo
+    restart: always
+    environment:
+      - TM_LICHOST=45.32.134.232
+      - TM_LICPORT=57777
+      - TM_LICPASS=qwerty
+      - TZ=Asia/Shanghai
+      #- TZ=Europe/Amsterdam
+    ports:
+      - "17800:7800"
+>>>>>>> origin/WIP-build-using-TM-baseimg
     volumes:
       - "./tmdata:/tmdata"
