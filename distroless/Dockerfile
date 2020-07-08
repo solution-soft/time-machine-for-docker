@@ -24,7 +24,7 @@ ENV DATADIR=data \
 ENV TZ=America/Los_Angeles
 
 ARG S6_OVERLAY_VERSION=v2.0.0.1
-ARG TM_LINUX_VERSION=12.10R4
+ARG TM_LINUX_VERSION=12.10R5
 
 ADD  https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp
 
