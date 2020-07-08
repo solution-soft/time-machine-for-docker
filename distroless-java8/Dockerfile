@@ -6,27 +6,8 @@ RUN set -ex \
 &&  apt-get update \
 &&  apt-get install busybox
 
+
 FROM gcr.io/distroless/java:8
-
-ARG S6_OVERLAY_VERSION=v1.22.1.0
-
-# -- copy busybox from the busybox docker image
-COPY --from=toolbox /bin/busybox /bin/busybox
-COPY --from=toolbox /bin/sh /bin/sh
-
-# -- copy from the build image
-COPY --from=master /etc/ssstm /etc/ssstm
-
-# -- updated preloading lib for TM
-COPY ./preload /etc/ssstm/
-
-# -- docker image build files
-COPY ./build /
-
-ADD https://github.com/just-containers/s6-overlay/releases/download/${S6_OVERLAY_VERSION}/s6-overlay-amd64.tar.gz /tmp
-
-
-FROM gcr.io/distroless/java:latest
 
 LABEL vendor="SolutionSoft Systems, Inc"
 LABEL maintainer="kzhao@solution-soft.com"
