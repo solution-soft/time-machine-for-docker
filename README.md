@@ -51,6 +51,7 @@ Each of the available docker images has TM preinstalled, and configured to use a
 
 TMFLS target is specified by the environment variables `TM_LICHOST`, `TM_LICPORT` and `TM_LICPASS`. `TM_LICHOST` is the IP address of the host on which TMFLS is running. `TM_LICPORT` is the TCP port number to communicate with TMFLS and the default value is 57777. `TM_LICPASS` is the security code that must match the security code from TMFLS and the default value is "docker".
 
+Each of the docker images also has *TMAgent* enabled, which provides HTTP-based RESTful API to control the creation, modification and removal of virtual clocks inside the container.  For instance, one can deploy *SolutionSoft Sync Server* to manage large cluster of TimeMachine enabled containers.  By default, *TMAgent* listens on port 7800.  One can redefine this port value through the environment variable `TMAGENT_PORT`.
 
 Before creating a container from the preconfigured image, we first need to create a directory on the host to keep the persistent data for a container, since TM stores some persistent data (such as log files, or persistent virtual clocks info). Let's assume we'll use directory `/var/tm/tmdata1` for the TMAgent persistent data and logs. To create such a directory, use the following command:
 
@@ -63,7 +64,8 @@ We can then use the following command to start/create a container in a detached 
   -e TM_LICHOST=192.168.20.112 \
   -e TM_LICPORT=57777 \
   -e TM_LICPASS=docker \
-  -p 17800:7800 \
+  -e TMAGENT_PORT=5800 \
+  -p 55800:5800 \
   -v /var/tm/tmdata1:/tmdata \
   solutionsoft/time-machine-for-centos7:latest
 ```
@@ -74,7 +76,7 @@ Some explanation here:
 
 1. as described above, we use environment variables `TM_LICHOST`, `TM_LICPORT` and `TM_LICPASS` to allow TM in the container to automatically check out a license from TMFLS; In this example 192.168.20.112 is the IP address of the host that runs the containers, and at the same time TMFLS.
 
-2.  TMAgent port 7800 inside the container is mapped to 17800 in the local machine;
+2.  TMAgent port 5800 (default is 7800) inside the container is mapped to 55800 in the local machine;
 
 	Please note that when creating containers from the Docker images, for each running container you need to make sure to map a different available port from the host to the port 7800 in the container. TM Agent (Time Machine component) from the container will listen on that port for remote requests from the Management Console and other products from the Time Machine Suite.
 
@@ -90,7 +92,7 @@ You can use the following command to check the container status:
 ```
 # docker ps
 CONTAINER ID   IMAGE                                         COMMAND                 CREATED         STATUS         PORTS                     NAMES
-be3c8f15dc20   solutionsoft/time-machine-for-centos7:12.9R2  "/entrypoint.sh /usr..."  5 seconds ago   Up 3 seconds   0.0.0.0:17800->7800/tcp   adoring_euclid
+be3c8f15dc20   solutionsoft/time-machine-for-centos7:12.9R2  "/entrypoint.sh /usr..."  5 seconds ago   Up 3 seconds   0.0.0.0:55800->5800/tcp   adoring_euclid
 ```
 
 With the container running in the background, you can spawn a shell session to the container and check from the inside:
@@ -147,8 +149,9 @@ services:
   			- TM_LICHOST=192.168.20.112
   			- TM_LICPORT=57777
   			- TM_LICPASS=docker
+			- TMAGENT_PORT=5800
 		ports:
-  			- "17800:7800"
+  			- "55800:5800"
 		volumes:
   			- "./tmdata1:/tmdata"
 ```
@@ -164,7 +167,7 @@ To stop this instance:
 
 ### Multiple Application Configuration ###
 
-Let's assume that we will configure three applications, with their persistent data stored at `./tmdata1`, `./tmdata2`, `./tmdata3`, respectively.  In addition, their TMagent listening ports will be 17800, 27800 and 37800, respectively.
+Let's assume that we will configure three applications, with their persistent data stored at `./tmdata1`, `./tmdata2`, `./tmdata3`, respectively.  In addition, their mapped TMagent listening ports will be 17800, 27800 and 37800, respectively.
 
 ```
 # mkdir -p ./tmdata1 ./tmdata2 ./tmdata3

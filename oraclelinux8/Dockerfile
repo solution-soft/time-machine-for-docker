@@ -7,6 +7,8 @@ ENV LICHOST=172.0.0.1 \
     LICPORT=57777 \
     LICPASS=docker
 
+ENV TMAGENT_PORT=7800
+
 ENV DATADIR=data \
     LOGDIR=log
 
@@ -34,9 +36,6 @@ RUN yum -y install tar tzdata && yum clean all \
 &&  echo "/etc/ssstm/\$LIB/libssstm.so.1.0" >> /etc/ld.so.preload \
 &&  mkdir -p /tmdata \
 &&  adduser -d ${DEFAULT_HOME} -s /bin/bash -M -r -c "Default Time Travel User" ${DEFAULT_USER}
-
-# -- expose tmagent listening port
-EXPOSE 7800
 
 # -- where TM data stores
 VOLUME /tmdata

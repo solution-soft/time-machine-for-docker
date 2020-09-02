@@ -16,6 +16,8 @@ ENV LICHOST=172.0.0.1 \
     LICPORT=57777 \
     LICPASS=docker
 
+ENV TMAGENT_PORT=7800
+
 ENV DATADIR=data \
     LOGDIR=log
 
@@ -61,9 +63,6 @@ RUN (cd /bin; \
 
 # -- distroless has a 'nonroot' user account
 # no time machine specific user account will be created
-
-# -- expose tmagent listening port
-EXPOSE 7800
 
 # -- where TM data stores
 VOLUME /tmdata

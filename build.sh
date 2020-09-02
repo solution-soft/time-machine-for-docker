@@ -4,7 +4,7 @@ set -ex
 
 MACHINES="centos7 centos8 rhel7 rhel8 oraclelinux7 oraclelinux8 ubuntu16.04 ubuntu18.04 opensuse15.1 distroless distroless-java8"
 
-TAGNAME="12.10R5-build01"
+TAGNAME="12.10R5-build03"
 
 if [ $# -gt 0 ]; then
     MACHINES=$*

@@ -7,6 +7,8 @@ ENV LICHOST=172.0.0.1 \
     LICPORT=57777 \
     LICPASS=docker
 
+ENV TMAGENT_PORT=7800
+
 ENV DATADIR=data \
     LOGDIR=log
 
@@ -40,9 +42,6 @@ RUN set -ex \
 &&  mkdir -p /tmdata \
 &&  useradd -r -m -d ${DEFAULT_HOME} -s /bin/bash -c "Default Time Travel User" ${DEFAULT_USER} \
 &&  mkdir -p /run/lock
-
-# -- expose tmagent listening port
-EXPOSE 7800
 
 # -- where TM data stores
 VOLUME /tmdata
